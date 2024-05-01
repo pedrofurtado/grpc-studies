@@ -1,0 +1,52 @@
+version: '3'
+
+x-apps-nodejs:
+  &apps-nodejs
+  restart: always
+  image: node:20
+  working_dir: /app
+  command: /bin/bash -c "npm install && npm run start"
+
+x-apps-ruby:
+  &apps-ruby
+  restart: always
+  image: ruby:3.0.4
+  working_dir: /app
+  command: /bin/bash -c "bundle install && bundle exec rackup --host 0.0.0.0 --port 9292"
+
+services:
+  server_nodejs:
+    <<: *apps-nodejs
+    volumes:
+      - ./proto:/proto
+      - ./apps-nodejs/server/:/app
+    ports:
+      - 3001:3000 # web
+      - 5001:5000 # grpc
+
+  client_nodejs:
+    <<: *apps-nodejs
+    volumes:
+      - ./proto:/proto
+      - ./apps-nodejs/client/:/app
+    ports:
+      - 3002:3000 # web
+      - 5002:5000 # grpc
+
+  server_ruby:
+    <<: *apps-ruby
+    volumes:
+      - ./proto:/proto
+      - ./apps-ruby/server/:/app
+    ports:
+      - 3003:9292 # web
+      - 5003:5000 # grpc
+
+  client_ruby:
+    <<: *apps-ruby
+    volumes:
+      - ./proto:/proto
+      - ./apps-ruby/client/:/app
+    ports:
+      - 3004:9292 # web
+      - 5004:5000 # grpc
