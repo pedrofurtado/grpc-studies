@@ -8,14 +8,15 @@ app.use(bodyParser.json())
 
 app.get('/', (req, res) => {
   const gRPC = require('grpc')
-  const ProductService = gRPC.load('/proto/products.proto').ProductService
+  const productProto = gRPC.load('/proto/products.proto')
 
-  const client = new ProductService('server_nodejs:5000', gRPC.credentials.createInsecure())
+  const client = new productProto.ProductService(process.env.GRPC_SERVER, gRPC.credentials.createInsecure())
 
-  client.list({}, (error, products) => {
+  client.listAll({}, (error, data) => {
     res.json({
+      service: 'listAll',
       error: error,
-      data_from_grpc: products
+      data: data
     })
   })
 

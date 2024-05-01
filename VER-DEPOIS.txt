@@ -9,3 +9,11 @@ terminar app ruby:
 
 como fica autenticação e autorização no grpc
 como fica https/ssl no grpc
+
+o que acontece se da mismatch no payload do protobuf e o enviado pelo cliente?
+como versionar o payload do proto (em caso de add fields, renomear e etc)?precisa syncar ao msm tempo cliente e server?
+o que acontece ao chamar uma rpc q nao existe?
+o q acontece se der erro, payload trocado, servidor fora do ar e etc?
+como retornar erros no grpc?
+como ficam campos opcionals ou qdo vem campos "nao mapeados"?
+como fazer paginação ou passagem de parametros?
