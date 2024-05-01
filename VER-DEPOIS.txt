@@ -1,0 +1,11 @@
+terminar app nodejs:
+  https://github.com/alfianlosari/node-grpc-server-note-crud
+  https://github.com/programadriano/node-grpc
+  https://blog.logrocket.com/creating-a-crud-api-with-node-express-and-grpc/
+
+terminar app ruby:
+  xxx
+  xxx
+
+como fica autenticação e autorização no grpc
+como fica https/ssl no grpc
