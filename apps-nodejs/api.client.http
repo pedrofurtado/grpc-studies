@@ -1,0 +1,37 @@
+GET http://localhost:3002 HTTP/1.1
+Content-Type: application/json
+
+###
+
+GET http://localhost:3002/api/products HTTP/1.1
+Content-Type: application/json
+
+###
+
+GET http://localhost:3002/api/products/1 HTTP/1.1
+Content-Type: application/json
+
+###
+
+POST http://localhost:3002/api/products HTTP/1.1
+Content-Type: application/json
+
+{
+	"name": "new name here",
+	"description": "new description here"
+}
+
+###
+
+PUT http://localhost:3002/api/products/1 HTTP/1.1
+Content-Type: application/json
+
+{
+	"name": "first product name",
+	"description": "first product description"
+}
+
+###
+
+DELETE http://localhost:3002/api/products/1 HTTP/1.1
+Content-Type: application/json
