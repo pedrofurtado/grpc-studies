@@ -22,6 +22,9 @@ end
 
 get '/api/products' do
   content_type :json
+
+  # https://rubydoc.info/gems/grpc/GRPC/GenericService/Dsl:rpc_stub_class
+  # https://github.com/grpc/grpc/blob/v1.63.0/src/ruby/lib/grpc/generic/service.rb#L148-L191
   stub = ProductService::Stub.new(ENV['GRPC_SERVER'], :this_channel_is_insecure)
 
   error = nil
