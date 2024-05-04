@@ -20,8 +20,8 @@ function generateProductsForFakeDatabaseInMemory(numberOfProducts) {
   for (let i = 1; i <= numberOfProducts; i++) {
     products.push({
       id: i,
-      name: `Product ${i}`,
-      description: `Description ${i}`
+      name: `Product ${i} from NodeJS`,
+      description: `Description ${i} from NodeJS`
     })
   }
 
@@ -49,7 +49,7 @@ gRPCServer.addService(productsProto.ProductService.service, {
     else {
       callback({
         code: gRPC.status.NOT_FOUND, // All available gRPC status: https://grpc.github.io/grpc/core/md_doc_statuscodes.html
-        details: `Product with id=${productId} not found for get`
+        details: `Product with id=${productId} not found for get | NodeJS`
       })
     }
   },
@@ -73,7 +73,7 @@ gRPCServer.addService(productsProto.ProductService.service, {
     else {
       callback({
         code: gRPC.status.NOT_FOUND,
-        details: `Product with id=${productId} not found for update`
+        details: `Product with id=${productId} not found for update | NodeJS`
       })
     }
   },
@@ -89,7 +89,7 @@ gRPCServer.addService(productsProto.ProductService.service, {
     else {
       callback({
         code: gRPC.status.NOT_FOUND,
-        details: `Product with id=${productId} not found for delete`
+        details: `Product with id=${productId} not found for delete | NodeJS`
       })
     }
   }

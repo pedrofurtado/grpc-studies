@@ -16,15 +16,28 @@ end
 get '/' do
   content_type :json
   {
-    app: 'GRPC studies - Apps Ruby - Client'
+    app: 'GRPC studies - Apps Ruby - Client - Homepage'
   }.to_json
 end
 
 get '/api/products' do
   content_type :json
   stub = ProductService::Stub.new(ENV['GRPC_SERVER'], :this_channel_is_insecure)
-  products = stub.list_all(Empty.new)
-  products.to_json
+
+  error = nil
+  data = nil
+
+  data = begin
+           stub.list_all(Empty.new)
+         rescue GRPC::BadStatus => e
+           error = "GRPC error #{e.code} | Details #{e.details} | From Ruby"
+           nil
+         end
+  {
+    app: 'GRPC studies - Apps Ruby - Client - GET /api/products (GRPC ListAll)',
+    error: error,
+    data: data
+  }.to_json
 end
 
 get '/api/products/:id' do
@@ -40,12 +53,85 @@ get '/api/products/:id' do
   data = begin
            stub.get(ProductRequestId.new(id: id))
          rescue GRPC::BadStatus => e
-           error = "GRPC error #{e.code} | Details #{e.details}"
+           error = "GRPC error #{e.code} | Details #{e.details} | From Ruby"
            nil
          end
 
   {
     app: 'GRPC studies - Apps Ruby - Client - GET /api/products/:id (GRPC Get)',
+    error: error,
+    data: data
+  }.to_json
+end
+
+post '/api/products' do
+  content_type :json
+
+  payload = JSON.parse(request.body.read)
+
+  stub = ProductService::Stub.new(ENV['GRPC_SERVER'], :this_channel_is_insecure)
+
+  error = nil
+  data = nil
+
+  data = begin
+           stub.insert(Product.new(name: payload['name'], description: payload['description']))
+         rescue GRPC::BadStatus => e
+           error = "GRPC error #{e.code} | Details #{e.details} | From Ruby"
+           nil
+         end
+
+  {
+    app: 'GRPC studies - Apps Ruby - Client - POST /api/products (GRPC Insert)',
+    error: error,
+    data: data
+  }.to_json
+end
+
+put '/api/products/:id' do
+  content_type :json
+
+  id = params['id'].to_i
+  payload = JSON.parse(request.body.read)
+
+  stub = ProductService::Stub.new(ENV['GRPC_SERVER'], :this_channel_is_insecure)
+
+  error = nil
+  data = nil
+
+  data = begin
+           stub.update(Product.new(id: id, name: payload['name'], description: payload['description']))
+         rescue GRPC::BadStatus => e
+           error = "GRPC error #{e.code} | Details #{e.details} | From Ruby"
+           nil
+         end
+
+  {
+    app: 'GRPC studies - Apps Ruby - Client - PUT /api/products/:id (GRPC Update)',
+    error: error,
+    data: data
+  }.to_json
+end
+
+delete '/api/products/:id' do
+  content_type :json
+
+  id = params['id'].to_i
+
+  stub = ProductService::Stub.new(ENV['GRPC_SERVER'], :this_channel_is_insecure)
+
+  error = nil
+  data = nil
+
+  data = begin
+           stub.delete(ProductRequestId.new(id: id))
+         rescue GRPC::BadStatus => e
+           error = "GRPC error #{e.code} | Details #{e.details} | From Ruby"
+           nil
+         end
+
+  {
+    app: 'GRPC studies - Apps Ruby - Client - DELETE /api/products/:id (GRPC Delete)',
     error: error,
     data: data
   }.to_json

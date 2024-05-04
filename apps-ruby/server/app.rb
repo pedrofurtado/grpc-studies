@@ -11,7 +11,7 @@ require 'products_services_pb'
 DBInMemory = []
 4.times do |i|
   n = i + 1
-  DBInMemory << Product.new(id: n, name: "Product #{n}", description: "Description #{n}")
+  DBInMemory << Product.new(id: n, name: "Product #{n} from Ruby", description: "Description #{n} from Ruby")
 end
 
 configure do
@@ -29,14 +29,35 @@ end
 class ProductsGRPCServer < ProductService::Service
   # list_all implements the ListAll rpc method.
   def list_all(req, _unused_call)
-    puts "ProductsGRPCServer - ListAll rpc method"
     ::ProductListAllResponse.new(status: "SUCCESS", message: "done", results: DBInMemory)
   end
 
   def get(req, _unused_call)
     # https://stackoverflow.com/questions/48671754/how-can-i-return-an-error-from-a-grpc-service
     # https://www.rubydoc.info/gems/grpc/GRPC/NotFound
-    DBInMemory.find { |p| p.id == req.id } || (raise GRPC::NotFound.new("Product with id=#{req.id} not found for get"))
+    DBInMemory.find { |p| p.id == req.id } || (raise GRPC::NotFound.new("Product with id=#{req.id} not found for get | Ruby"))
+  end
+
+  def insert(req, _unused_call)
+    new_id = DBInMemory.max_by { |p| p.id }.id + 1
+    new_product = Product.new(id: new_id, name: req.name, description: req.description)
+    DBInMemory << new_product
+    new_product
+  end
+
+  def update(req, _unused_call)
+    product_found = DBInMemory.find { |p| p.id == req.id } || (raise GRPC::NotFound.new("Product with id=#{req.id} not found for update | Ruby"))
+
+    product_found.name = req.name
+    product_found.description = req.description
+
+    product_found
+  end
+
+  def delete(req, _unused_call)
+    product_found = DBInMemory.find { |p| p.id == req.id } || (raise GRPC::NotFound.new("Product with id=#{req.id} not found for delete | Ruby"))
+    DBInMemory.delete_if { |p| p.id == req.id }
+    ::Empty.new
   end
 end
 
