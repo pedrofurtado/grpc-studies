@@ -27,6 +27,9 @@ get '/' do
 end
 
 class ProductsGRPCServer < ProductService::Service
+  # https://github.com/grpc/grpc/blob/v1.63.0/src/ruby/lib/grpc/generic/service.rb#L92-L103
+  # https://rubydoc.info/gems/grpc/GRPC/GenericService/Dsl:rpc
+
   # list_all implements the ListAll rpc method.
   def list_all(req, _unused_call)
     ::ProductListAllResponse.new(status: "SUCCESS", message: "done", results: DBInMemory)
