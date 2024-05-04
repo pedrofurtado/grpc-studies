@@ -1,6 +1,5 @@
-terminar app ruby:
-  xxx
-  xxx
+terminar app ruby (fazer a msm response/request da app node)
+trocar na app node o server para ruby e no ruby para o node, para testar a interoperancia entre linguagens
 
 como fica autenticação e autorização no grpc
 como fica https/ssl no grpc
